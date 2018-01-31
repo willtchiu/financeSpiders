@@ -8,6 +8,7 @@ Light weight web scraper and crawlers for various financial news sources. Discla
 ### Current Status:
 #### Version 0.01
 - Basic scraping of current related news article headlines and links
+- Examples of scraped data in `financeScraper/*.jl`
 
 ### Overall TODOs:
 - Create API for scraping specific companies by stock ticker labels
