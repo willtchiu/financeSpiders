@@ -9,19 +9,6 @@ class MWSpider(scrapy.Spider):
     start_urls = ['https://www.marketwatch.com/investing/stock/aapl/news'#,
                   #'https://www.marketwatch.com/investing/stock/nvda/news'#
                  ]
-    
-    """
-    def parse(self, response):
-        #inspect_response(response)
-
-        for article in response.xpath('//li/div/p/a'):
-            article_link = article.xpath('@href').extract_first()
-            yield {
-                'headline': article.xpath('text()').extract_first(),
-                'link': "".join([self.home, article_link])
-                'text': yield scrapy.follow(article_link, callback=self.parse_article) if article_link is not None else ""
-            }
-    """
 
     def parse(self, response):
         for article in response.xpath('//li/div/p/a'):
