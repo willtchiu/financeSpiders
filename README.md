@@ -4,7 +4,7 @@ Disclaimer: Developed for educational purposes only.
 
 ### Financial News Sources Supported:
 - Wall Street Journal (WIP: Workaround to curate more relevant news articles from specific company pages)
-- Market Watch (WIP: Handle crawling of infinite scrolling article list)
+- Market Watch (WIP: Handle crawling of infinite scrolling article list, check out https://stackoverflow.com/questions/25583414/working-with-post-request-to-load-more-articles-with-scrapy-python)
 
 ### Current Status:
 #### Version 0.01
