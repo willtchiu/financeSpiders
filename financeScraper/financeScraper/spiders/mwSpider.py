@@ -6,9 +6,15 @@ import scrapy
 class MWSpider(scrapy.Spider):
     home = 'https://marketwatch.com'
     name = "mws"
-    start_urls = ['https://www.marketwatch.com/investing/stock/aapl/news'#,
+    """
+    start_urls = [#'https://www.marketwatch.com/investing/stock/aapl/news',
                   #'https://www.marketwatch.com/investing/stock/nvda/news'#
+                  'https://www.marketwatch.com/investing/stock/baba/news'
                  ]
+    """
+    def __init__(self, *args, **kwargs):
+        super(MWSpider, self).__init__(*args, **kwargs)
+        self.start_urls = [kwargs.get('start_url')]
 
     def parse(self, response):
         for article in response.xpath('//li/div/p/a'):
