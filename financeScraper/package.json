@@ -1,8 +1,0 @@
-{
-  "name": "financeScraper",
-  "version": "0.02",
-  "dependencies": {
-    "Scrapy": "^1.5.0",
-    "Twisted": "^17.9.0"
-  }
-}
