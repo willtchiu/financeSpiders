@@ -9,6 +9,12 @@ from financeScraper import settings as my_settings
 import scrapy
 import sys, getopt
 
+"""
+    Class: MWSpider
+    Description: Spider for crawling MarketWatch links given a stock
+    ticker symbol and its own articles. Currently does not support
+    scraping of outside linked articles.
+"""
 class MWSpider(scrapy.Spider):
     home = 'https://marketwatch.com'
     name = "mws"
@@ -46,6 +52,11 @@ class MWSpider(scrapy.Spider):
         yield item
 
 # Does not parse article
+"""
+    Class: WSJSpider
+    Description: Spider for Wall Street Journal. Currently WIP to
+    obtain more relevant article links. Does not scrap articles.
+"""
 class WSJSpider(scrapy.Spider):
 
     home = 'https://www.wsj.com'
