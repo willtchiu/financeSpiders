@@ -61,17 +61,28 @@ class WSJSpider(scrapy.Spider):
 
     home = 'https://www.wsj.com'
     name = 'wsj'
-    start_urls = ['https://www.wsj.com/search/term.html?KEYWORDS=Apple']
+
+    def __init__(self, *args, **kwargs):
+        super(WSJSpider, self).__init__(*args, **kwargs)
+        self.tick = kwargs.get('tick')
+        self.start_urls = [self.create_start_url(self.tick)]
 
     def parse(self, response):
-        #inspect_response(response)
-        self.log('parsed')
+        for article in response.xpath(
+                '//ul[@class=\'cr_newsSummary\']//span[@class=\'headline\']'
+            ):
 
-        for article in response.xpath('//h3/a'):
-            yield {
-                'headline': article.xpath('text()').extract_first(),
-                'links': "".join([self.home, article.xpath('@href').extract_first()])
-            }
+            article_link = article.xpath('a/@href').extract_first()
+            yield response.follow(article_link, callback=self.parse_article) if article_link is not None else ""
+
+    """
+    TODO: Handle dynamic parsing, strip url for source
+    parser class?
+    i.e. if MarketWatch -> parse_article_mws
+    """
+    def parse_article(self, response):
+        return
+
 
 def read_file(fn):
     with open(fn, 'r') as f:
