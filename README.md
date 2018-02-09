@@ -3,6 +3,7 @@ Light weight web scraper and crawlers for various financial news sources.
 Disclaimer: Developed for educational purposes only.
 
 ### Usage:
+Dependencies: python3, Scrapy, Twisted
 1. List stock tickers interested in separate line in a file, i.e. ```stock.txt```
 2. Execute
 ```python3 crawlers.py -i stock.txt```
