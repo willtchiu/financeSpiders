@@ -35,7 +35,12 @@ def parse(response, tick):
         pass
     elif base_url == NewsSource.reu.value:
         # Do Something
-        pass
+        headline = response.xpath('//title/text()').extract_first()
+        headline = clean_text(headline.split())
+        author   = response.xpath('//meta[@name=\'Author\']/@content').extract_first()
+        raw_text = response.xpath('//p[not(@class)]/node()[not(self::a or self::span)]').extract()
+        text = clean_text(raw_text)
+
     elif base_url == NewsSource.blo.value:
         # Do something
         pass

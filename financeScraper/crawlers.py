@@ -38,7 +38,32 @@ class MWSpider(scrapy.Spider):
     def parse_article(self, response):
         yield utils.parse(response, self.tick)
 
-# Does not parse article
+"""
+    Class: ReutersSpider
+"""
+class ReutersSpider(scrapy.Spider):
+
+    home = 'https://www.reuters.com'
+    name = 'reu'
+
+    def create_start_url(self, tick):
+        return "".join(["https://www.reuters.com/finance/stocks/company-news/", tick, ".OQ"])
+
+    def __init__(self, *args, **kwargs):
+        super(ReutersSpider, self).__init__(*args, **kwargs)
+        self.tick = kwargs.get('tick')
+        self.start_urls = [self.create_start_url(self.tick)]
+
+    def parse(self, response):
+        for article in response.xpath('//div[@class=\'feature\']'):
+
+            article_link = article.xpath('h2/a/@href').extract_first()
+            article_link = "".join([self.home, article_link])
+            yield response.follow(article_link, callback=self.parse_article) if article_link is not None else ""
+
+    def parse_article(self, response):
+        yield utils.parse(response, self.tick)
+
 """
     Class: WSJSpider
     Description: Spider for Wall Street Journal. Currently WIP to
@@ -63,14 +88,9 @@ class WSJSpider(scrapy.Spider):
             yield response.follow(article_link, callback=self.parse_article) if article_link is not None else ""
 
     """
-    TODO: Handle dynamic parsing, strip url for source
-    parser class?
-    i.e. if MarketWatch -> parse_article_mws
+    TODO: Subscriber/Login Wall...
     """
     def parse_article(self, response):
-        base_url = utils.strip_base_url(response.url) 
-        header = author = raw_text = None
-        
         return
 
 
@@ -103,6 +123,7 @@ def main(argv):
     for tick in ticks:
         kwargs = {'tick': tick}
         runner.crawl(MWSpider, **kwargs)
+        runner.crawl(ReutersSpider, **kwargs)
 
     d = runner.join()
     d.addBoth(lambda _: reactor.stop())
