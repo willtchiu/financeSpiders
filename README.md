@@ -10,11 +10,11 @@ Dependencies: python3, Scrapy, Twisted
 3. Data output is in current directory following '{news_source_name}\_{stock_ticker}.jl'
 
 ### Financial News Sources Supported:
-- Wall Street Journal (WIP: Workaround to curate more relevant news articles from specific company pages)
+- Wall Street Journal (HOLD: Needs subscription to view articles...)
 - Market Watch (WIP: Handle crawling of infinite scrolling article list, check out https://stackoverflow.com/questions/25583414/working-with-post-request-to-load-more-articles-with-scrapy-python)
-    - 100% able to extract from MarketWatch, but not from links to other sites
+    - 100% able to extract from MarketWatch
 - Bloomberg (Not supported)
-- Reuters (Not supported)
+- Reuters (Supported)
 - MSNBC (Not Supported)
 
 ### Changelog:
@@ -26,12 +26,18 @@ Dependencies: python3, Scrapy, Twisted
 - Centralized script: ```crawlers.py``` to simplify execution and pipelining
 - Crawls all MarketWatch links and scrapes their articles
 - Supports scraping of multiple stock ticker symbols
-- WSJ, Bloomberg, MSNBC, Reuters (WIP)
+
+#### Version 0.03
+- Added dynamic parsing based on source news website
+- Added support for Reuters articles
+- Hold on WSJ, needs subscription
 
 
 ### Overall TODOs:
 ```diff
 + Develop web crawlers to curate article information from current links
 + Create API for scraping specific companies by stock ticker labels
-- More dynamic crawlers that can extract from different html formatting
++ More dynamic crawlers that can extract from different news sites
+- Add date tags to .jl data files
+- Add chron job to periodically scrape at some `time`
 ```
