@@ -6,6 +6,8 @@ from scrapy.settings import Settings
 from financeScraper.items import FinancescraperItem
 from financeScraper import settings as my_settings
 
+import financeScraper.utils as utils
+
 import scrapy
 import sys, getopt
 
@@ -16,8 +18,8 @@ import sys, getopt
     scraping of outside linked articles.
 """
 class MWSpider(scrapy.Spider):
-    home = 'https://marketwatch.com'
-    name = "mws"
+    home       = 'https://marketwatch.com'
+    name       = "mws"
 
     def create_start_url(self, tick):
         return "".join(["https://www.marketwatch.com/investing/stock/", tick, "/news"])
@@ -29,27 +31,12 @@ class MWSpider(scrapy.Spider):
 
     
     def parse(self, response):
-        print ("here")
         for article in response.xpath('//li/div/p/a'):
             article_link = article.xpath('@href').extract_first()
             yield response.follow(article_link, callback=self.parse_article) if article_link is not None else ""
 
     def parse_article(self, response):
-        headline = response.xpath('//title/text()').extract_first()
-        author   = response.xpath('//meta[@name=\'author\']/@content').extract_first()
-
-        raw_text = response.xpath('//p/text()').extract()
-        text     = " ".join(map(str.strip, raw_text))
-
-        item = FinancescraperItem()
-        item['tick']     = self.tick
-        item['headline'] = headline
-        item['author']   = author
-        item['link']     = response.url
-        item['text']     = text
-        item['source']   = 'MarketWatch'
-        
-        yield item
+        yield utils.parse(response, self.tick)
 
 # Does not parse article
 """
@@ -81,6 +68,9 @@ class WSJSpider(scrapy.Spider):
     i.e. if MarketWatch -> parse_article_mws
     """
     def parse_article(self, response):
+        base_url = utils.strip_base_url(response.url) 
+        header = author = raw_text = None
+        
         return
 
 
