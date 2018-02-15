@@ -43,7 +43,10 @@ def parse(response, tick):
 
     elif base_url == NewsSource.blo.value:
         # Do something
-        pass
+        headline = response.xpath('//title/text()').extract_first() 
+        author = response.xpath('//address[@class]/text()').extract_first()
+        raw_text = response.xpath('//div[@class=\"body-copy\"]/p/text()').extract()
+        text = clean_text(raw_text)
     else:
         # Handle unknown news source scraping
         print("--------- Unknown news source -------")

@@ -29,7 +29,7 @@ class MWSpider(scrapy.Spider):
         self.tick = kwargs.get('tick')
         self.start_urls = [self.create_start_url(self.tick)]
 
-    
+
     def parse(self, response):
         for article in response.xpath('//li/div/p/a'):
             article_link = article.xpath('@href').extract_first()
@@ -93,6 +93,30 @@ class WSJSpider(scrapy.Spider):
     def parse_article(self, response):
         return
 
+"""
+    Class: BloSpider
+"""
+class BloSpider(scrapy.Spider):
+    home       = 'https://marketwatch.com'
+    name       = "blo"
+
+    def create_start_url(self, tick):
+        return "".join(["https://www.bloomberg.com/quote/", tick, ":US"])
+
+    def __init__(self, *args, **kwargs):
+        super(BloSpider, self).__init__(*args, **kwargs)
+        self.tick = kwargs.get('tick')
+        self.start_urls = [self.create_start_url(self.tick)]
+
+
+    def parse(self, response):
+        for article in response.xpath('//article[@class]'):
+            article_link = article.xpath('a/@href').extract_first()
+            yield response.follow(article_link, callback=self.parse_article) if article_link is not None else ""
+
+    def parse_article(self, response):
+        yield utils.parse(response, self.tick)
+
 
 def read_file(fn):
     with open(fn, 'r') as f:
@@ -112,7 +136,7 @@ def main(argv):
             sys.exit()
         elif opt in ("-i", "--ifile="):
             inputfile = arg
-    
+
     ticks = list(read_file(inputfile))
     # Create and run spiders
     configure_logging()
@@ -124,6 +148,7 @@ def main(argv):
         kwargs = {'tick': tick}
         runner.crawl(MWSpider, **kwargs)
         runner.crawl(ReutersSpider, **kwargs)
+        runner.crawl(BloSpider, **kwargs)
 
     d = runner.join()
     d.addBoth(lambda _: reactor.stop())
