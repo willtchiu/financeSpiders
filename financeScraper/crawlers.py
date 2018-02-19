@@ -14,8 +14,7 @@ import sys, getopt
 """
     Class: MWSpider
     Description: Spider for crawling MarketWatch links given a stock
-    ticker symbol and its own articles. Currently does not support
-    scraping of outside linked articles.
+    ticker symbol and its own articles.
 """
 class MWSpider(scrapy.Spider):
     home       = 'https://marketwatch.com'
