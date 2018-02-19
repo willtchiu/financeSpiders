@@ -13,7 +13,7 @@ Dependencies: python3, Scrapy, Twisted
 - Wall Street Journal (HOLD: Needs subscription to view articles...)
 - Market Watch (WIP: Handle crawling of infinite scrolling article list, check out https://stackoverflow.com/questions/25583414/working-with-post-request-to-load-more-articles-with-scrapy-python)
     - 100% able to extract from MarketWatch
-- Bloomberg (Not supported)
+- Bloomberg (Supported)
 - Reuters (Supported)
 - MSNBC (Not Supported)
 
