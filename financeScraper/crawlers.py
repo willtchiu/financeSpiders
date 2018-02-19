@@ -123,6 +123,30 @@ def read_file(fn):
         for ticker in f.readlines():
             yield ticker.strip()
 
+"""
+    Class: MSNBCSpider
+"""
+class MSNBCSpider(scrapy.Spider):
+    home       = 'https://www.cnbc.com'
+    name       = "msn"
+
+    def create_start_url(self, tick):
+        return "".join(["https://www.cnbc.com/quotes/?symbol=", tick, "&tab=news"])
+
+    def __init__(self, *args, **kwargs):
+        super(MSNBCSpider, self).__init__(*args, **kwargs)
+        self.tick = kwargs.get('tick')
+        self.start_urls = [self.create_start_url(self.tick)]
+
+
+    def parse(self, response):
+        for article in response.xpath('//div[@class=\"assets\"]/a'):
+            article_link = article.xpath('@href').extract_first()
+            yield response.follow(article_link, callback=self.parse_article) if article_link is not None else ""
+
+    def parse_article(self, response):
+        yield utils.parse(response, self.tick)
+
 def main(argv):
     inputfile = ''
     try:
@@ -149,6 +173,7 @@ def main(argv):
         runner.crawl(MWSpider, **kwargs)
         runner.crawl(ReutersSpider, **kwargs)
         runner.crawl(BloSpider, **kwargs)
+        runner.crawl(MSNBCSpider, **kwargs)
 
     d = runner.join()
     d.addBoth(lambda _: reactor.stop())
