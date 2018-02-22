@@ -17,7 +17,7 @@ Dependencies: python3, Scrapy, Twisted
 - Reuters (Supported)
 - MSNBC (Supported)
 - TheStreet (Not supported)
-- MarketRealist (Not supported)
+- MarketRealist (Hold: paywall)
 - SeekingAlpha (Not supported)
 - Fool (Not supported)
 - Investopedia (Not supported)
