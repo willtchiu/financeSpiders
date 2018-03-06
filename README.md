@@ -18,7 +18,7 @@ Dependencies: python3, Scrapy, Twisted
 - MSNBC (Supported)
 - TheStreet (Not supported)
 - MarketRealist (Hold: paywall)
-- SeekingAlpha (Not supported)
+- SeekingAlpha (Supported)
 - Fool (Not supported)
 - Investopedia (Not supported)
 
@@ -38,6 +38,8 @@ Dependencies: python3, Scrapy, Twisted
 #### Feb. 19th, 2018
 - Added support for MSNBC
 
+#### Mar. 5th, 2018
+- Added support for SeekingAlpha
 
 ### Overall TODOs:
 ```diff
