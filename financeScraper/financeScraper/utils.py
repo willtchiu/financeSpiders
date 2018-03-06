@@ -10,6 +10,7 @@ class NewsSource(Enum):
     reu = "https://www.reuters.com/"
     blo = "https://www.bloomberg.com/"
     msn = "https://www.cnbc.com/"
+    sal = "https://seekingalpha.com/"
 
 def strip_base_url(url):
     """Strips url down to base url
@@ -71,7 +72,6 @@ def parse(response, tick):
 
     print("Base url is: ")
     print(base_url)
-    print(NewsSource.mws.value)
     if base_url == NewsSource.mws.value:
         # DO something
         headline = response.xpath('//title/text()').extract_first()
@@ -102,6 +102,13 @@ def parse(response, tick):
         author   = response.xpath('//meta[@name=\"author\"]/@content').extract_first()
         raw_text = ' '.join(response.xpath('//div[@class=\"group\"]/p').extract())
         text     = remove_html_tags(raw_text)
+    elif base_url == NewsSource.sal.value:
+      # Do something
+        print("Here--------")
+        headline = response.xpath("//title/text()").extract_first()
+        author   = response.xpath("//meta[@name=\"author\"]/@content").extract_first()
+        raw_text = ''.join(response.xpath("//*[@class=\"p p1\" or @class=\"p p2\"]").extract())
+        text     = clean_text(remove_html_tags(raw_text).split())
     else:
         # Handle unknown news source scraping
         print("--------- Unknown news source -------")
