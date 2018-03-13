@@ -5,6 +5,7 @@
 # Don't forget to add your pipeline to the ITEM_PIPELINES setting
 # See: https://doc.scrapy.org/en/latest/topics/item-pipeline.html
 import json
+from datetime import datetime
 
 class FinancescraperPipeline(object):
 
@@ -12,7 +13,8 @@ class FinancescraperPipeline(object):
         fn = ''
         if spider.tick:
             if spider.name:
-                fn = "".join([spider.name, "_", spider.tick, ".jl"])
+                date = "{:%b-%d-%Y}".format(datetime.now())
+                fn = "./data/{}_{}-{}.jl".format(spider.name, spider.tick, date)
         self.file = open(fn, 'a')
 
     def close_spider(self, spider):
