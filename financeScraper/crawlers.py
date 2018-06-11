@@ -30,12 +30,13 @@ class MWSpider(scrapy.Spider):
 
 
     def parse(self, response):
-        for article in response.xpath('//li/div/p/a'):
+        news_links = response.xpath('//h3[@class=\'article__headline\']/a[@class=\'link\']')
+        for article in news_links:
             article_link = article.xpath('@href').extract_first()
             yield response.follow(article_link, callback=self.parse_article) if article_link is not None else ""
 
     def parse_article(self, response):
-        yield utils.parse(response, self.tick)
+        yield utils.generate_article_list(response, self.tick)
 
 """
     Class: ReutersSpider
@@ -54,14 +55,14 @@ class ReutersSpider(scrapy.Spider):
         self.start_urls = [self.create_start_url(self.tick)]
 
     def parse(self, response):
-        for article in response.xpath('//div[@class=\'feature\']'):
-
-            article_link = article.xpath('h2/a/@href').extract_first()
+        news_links = response.xpath('//div[@class=\'moduleBody\']/div[@class=\'feature\']/h2/a')
+        for article in news_links:
+            article_link = article.xpath('@href').extract_first()
             article_link = "".join([self.home, article_link])
             yield response.follow(article_link, callback=self.parse_article) if article_link is not None else ""
 
     def parse_article(self, response):
-        yield utils.parse(response, self.tick)
+        yield utils.generate_article_list(response, self.tick)
 
 """
     Class: WSJSpider
@@ -96,7 +97,7 @@ class WSJSpider(scrapy.Spider):
     Class: BloSpider
 """
 class BloSpider(scrapy.Spider):
-    home       = 'https://marketwatch.com'
+    home       = 'https://bloomberg.com'
     name       = "blo"
 
     def create_start_url(self, tick):
@@ -109,12 +110,13 @@ class BloSpider(scrapy.Spider):
 
 
     def parse(self, response):
-        for article in response.xpath('//article[@class]'):
-            article_link = article.xpath('a/@href').extract_first()
+        news_links = response.xpath('//article/a')
+        for article in news_links:
+            article_link = article.xpath('@href').extract_first()
             yield response.follow(article_link, callback=self.parse_article) if article_link is not None else ""
 
     def parse_article(self, response):
-        yield utils.parse(response, self.tick)
+        yield utils.generate_article_list(response, self.tick)
 
 
 def read_file(fn):
@@ -141,10 +143,12 @@ class MSNBCSpider(scrapy.Spider):
     def parse(self, response):
         for article in response.xpath('//div[@class=\"assets\"]/a'):
             article_link = article.xpath('@href').extract_first()
+            if "video.cnbc.com" in article_link:
+                continue
             yield response.follow(article_link, callback=self.parse_article) if article_link is not None else ""
 
     def parse_article(self, response):
-        yield utils.parse(response, self.tick)
+        yield utils.generate_article_list(response, self.tick)
 
 def main(argv):
     inputfile = ''
