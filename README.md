@@ -23,9 +23,8 @@ python3 crawlers.py -i stocks.txt
 This will execute the cron job at 5:00PM system clock time every day
 
 ### Financial News Sources Supported:
-- Wall Street Journal (HOLD: Needs subscription to view articles...)
-- Market Watch (WIP: Handle crawling of infinite scrolling article list, check out https://stackoverflow.com/questions/25583414/working-with-post-request-to-load-more-articles-with-scrapy-python)
-    - 100% able to extract from MarketWatch
+- Wall Street Journal (Hold: paywall)
+- Market Watch (Supported)
 - Bloomberg (Supported)
 - Reuters (Supported)
 - MSNBC (Supported)
