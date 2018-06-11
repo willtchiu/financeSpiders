@@ -1,6 +1,5 @@
 # financeSpiders
-Light weight web scraper and crawlers for various financial news sources.
-Disclaimer: Developed for educational purposes only.
+Light weight web scraper and crawlers for various financial news sources. Aggregates article links and parses article texts using [Newspaper3k](https://github.com/codelucas/newspaper).
 
 ### Usage:
 Dependencies: python3, Scrapy, Twisted
@@ -8,6 +7,20 @@ Dependencies: python3, Scrapy, Twisted
 2. Execute
 ```python3 crawlers.py -i stock.txt```
 3. Data output is in current directory following '{news_source_name}\_{stock_ticker}.jl'
+
+#### Cron job set-up:
+Using bash script to execute data scraping on a daily basis
+1. ```cd /etc/cron.daily/newsJob.sh```
+In newsJob.sh:
+```
+#!/bin/bash
+cd /to/root/project/directory/with/crawlers.py
+python3 crawlers.py -i stocks.txt
+```
+2. ```chmod 755 newsJob.sh```
+3. ```crontab -e```
+```00 17 * * * /etc/cron.daily/newsJob.sh```
+This will execute the cron job at 5:00PM system clock time every day
 
 ### Financial News Sources Supported:
 - Wall Street Journal (HOLD: Needs subscription to view articles...)
@@ -24,30 +37,22 @@ Dependencies: python3, Scrapy, Twisted
 
 ### Changelog:
 
-- Basic scraping of current related news article headlines, links, and texts
-- Examples of scraped data in `financeScraper/*.jl`
-
-- Centralized script: ```crawlers.py``` to simplify execution and pipelining
-- Crawls all MarketWatch links and scrapes their articles
-- Supports scraping of multiple stock ticker symbols
-
-- Added dynamic parsing based on source news website
-- Added support for Reuters articles
-- Hold on WSJ, needs subscription
-
 #### Feb. 19th, 2018
 - Added support for MSNBC
 
 #### Mar. 5th, 2018
 - Added support for SeekingAlpha
 
+#### Jun. 11th, 2018
+- Branched to outsource article parsing (WIP)
+- Updated article link scraping of supported news sites
+
 ### Overall TODOs:
 ```diff
 + Develop web crawlers to curate article information from current links
 + Create API for scraping specific companies by stock ticker labels
 + More dynamic crawlers that can extract from different news sites
++ Add date tags to .jl data files
 - Support more market news sites, parsing wise
-- Add date tags to .jl data files
-- Add chron job to periodically scrape at some `time`
 - Method to eliminate duplicate articles
 ```
